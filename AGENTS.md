@@ -17,6 +17,7 @@ sem dependência.
 index.html          a raiz — página mínima da marca, sem link nenhum
 404.html            a página de erro, mesma cara
 relatoriozeus/      o relatório de um cliente, uma pasta por cliente
+oferta/             ferramenta interna: mapa de oferta, margem e score
 referencia/         o site institucional clonado, NÃO publicado
 vercel.json         cleanUrls e trailingSlash
 .vercelignore       o que não vai para o ar
@@ -50,6 +51,20 @@ meio do documento.
 
 ⚠ **O repositório `apex-assessoria/site` tem a paleta antiga** (`#E79E14`,
 Inter) e não serve de referência visual para nada aqui.
+
+## `oferta/` — ferramenta interna da equipe
+
+Mapa de oferta, calculadora de margem (infoproduto) e score de 0 a 100.
+Mesmas regras da página de cliente: `noindex`, sem menu, sem link de saída, e
+fora do `index.html` da raiz — quem usa recebe o link.
+
+**Nada é salvo**, nem no navegador: o que guarda o trabalho é o botão
+"Copiar resumo". Isso é de propósito, pela regra abaixo.
+
+Os critérios e pesos do score estão no array `CRITERIOS` do script, marcados
+como **rascunho**: proposta inicial, ainda não validada com resultado de
+campanha. As taxas da calculadora (9,9% + R$ 1,00 de plataforma, 6% de imposto)
+são só valor de partida, editável na tela.
 
 ## O que este projeto não tem, de propósito
 
