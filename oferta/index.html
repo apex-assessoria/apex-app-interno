@@ -104,6 +104,25 @@ h1 em{font-family:var(--serif); font-style:italic; font-weight:400;
   outline:none; transition:border-color .3s}
 .name-box input:focus{border-color:var(--gold)}
 .name-box input::placeholder{color:#4d483d}
+[hidden]{display:none !important}
+/* mercado: Brasil, outro pais ou global */
+.mkt{max-width:620px; margin-top:22px}
+.mkt .mk-lbl{display:block; font-family:var(--mono); font-size:10px;
+  letter-spacing:.2em; text-transform:uppercase; color:var(--mute); margin-bottom:10px}
+.mkt-row{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+.segs{display:inline-flex; border:1px solid var(--line-2); border-radius:999px; padding:4px; gap:2px}
+.segs button{border:0; background:transparent; border-radius:999px; padding:8px 14px;
+  font-size:14px; font-weight:600; cursor:pointer; color:var(--mute); min-height:38px;
+  transition:background .2s,color .2s}
+.segs button[aria-checked="true"]{background:var(--gold); color:var(--on-gold)}
+.mkt input{flex:1 1 180px; min-width:0; background:transparent; border:0;
+  border-bottom:1.5px solid var(--line-2); padding:8px 0; font-size:16px; font-weight:700;
+  outline:none}
+.mkt input:focus{border-color:var(--gold)}
+.mkt input::placeholder{color:#57513f; font-weight:500}
+.in select{width:100%; border:0; background:transparent; outline:none; font-size:16px;
+  font-weight:700; padding:12px 0; cursor:pointer; color:var(--fg)}
+.in select option{background:var(--card); color:var(--fg)}
 .trail{display:flex; flex-wrap:wrap; gap:8px; margin-top:30px}
 .trail a{display:inline-flex; align-items:center; gap:8px; text-decoration:none;
   color:var(--fg); border:1px solid var(--line-2); border-radius:999px;
@@ -300,6 +319,17 @@ footer p{margin:14px 0 0}
       <label for="nome">Oferta</label>
       <input id="nome" type="text" placeholder="Nome da oferta ou do produto" autocomplete="off">
     </div>
+    <div class="mkt">
+      <span class="mk-lbl" id="mktLbl">Mercado</span>
+      <div class="mkt-row">
+        <div class="segs" role="radiogroup" aria-labelledby="mktLbl" id="mercado">
+          <button type="button" role="radio" data-m="br" aria-checked="true">Brasil</button>
+          <button type="button" role="radio" data-m="pais" aria-checked="false">Outro país</button>
+          <button type="button" role="radio" data-m="global" aria-checked="false">Global</button>
+        </div>
+        <input id="pais" type="text" autocomplete="off" aria-label="País" hidden>
+      </div>
+    </div>
     <nav class="trail" aria-label="Etapas">
       <a href="#mapa"><b>01</b>Mapa</a>
       <a href="#margem"><b>02</b>Margem</a>
@@ -331,17 +361,34 @@ footer p{margin:14px 0 0}
         <h3>Entradas · por venda</h3>
         <div class="inputs">
           <div class="in-row">
+            <div class="in"><label for="moeda">Moeda da venda</label>
+              <div class="box"><select id="moeda">
+                <option value="BRL">Real (R$)</option>
+                <option value="USD">Dólar (US$)</option>
+                <option value="EUR">Euro (€)</option>
+                <option value="GBP">Libra (£)</option>
+                <option value="MXN">Peso mexicano</option>
+                <option value="COP">Peso colombiano</option>
+                <option value="CLP">Peso chileno</option>
+                <option value="ARS">Peso argentino</option>
+              </select></div></div>
+            <div class="in" id="boxCambio" hidden><label for="cambio">Cotação: 1 <span id="curCode">USD</span> em reais</label>
+              <div class="box"><span>R$</span><input id="cambio" inputmode="decimal" placeholder="5,40"></div>
+              <p class="note">Só para mostrar o lucro em reais.</p></div>
+          </div>
+          <div class="divider"></div>
+          <div class="in-row">
             <div class="in"><label for="preco">Preço de venda</label>
-              <div class="box"><span>R$</span><input id="preco" inputmode="decimal" placeholder="497,00"></div></div>
+              <div class="box"><span class="cur">R$</span><input id="preco" inputmode="decimal" placeholder="497,00"></div></div>
             <div class="in"><label for="extra">Order bump / upsell médio</label>
-              <div class="box"><span>R$</span><input id="extra" inputmode="decimal" placeholder="0,00"></div></div>
+              <div class="box"><span class="cur">R$</span><input id="extra" inputmode="decimal" placeholder="0,00"></div></div>
           </div>
           <div class="divider"></div>
           <div class="in-row">
             <div class="in"><label for="platPct">Taxa da plataforma</label>
               <div class="box"><input id="platPct" inputmode="decimal" value="9,9"><span>%</span></div></div>
             <div class="in"><label for="platFix">Taxa fixa por venda</label>
-              <div class="box"><span>R$</span><input id="platFix" inputmode="decimal" value="1,00"></div></div>
+              <div class="box"><span class="cur">R$</span><input id="platFix" inputmode="decimal" value="1,00"></div></div>
           </div>
           <div class="in-row">
             <div class="in"><label for="imposto">Imposto sobre o faturamento</label>
@@ -352,10 +399,10 @@ footer p{margin:14px 0 0}
           </div>
           <div class="in-row">
             <div class="in"><label for="entrega">Custo de entrega</label>
-              <div class="box"><span>R$</span><input id="entrega" inputmode="decimal" value="0"></div>
+              <div class="box"><span class="cur">R$</span><input id="entrega" inputmode="decimal" value="0"></div>
               <p class="note">Área de membros, suporte, mentoria.</p></div>
             <div class="in"><label for="cpa">Custo de tráfego por venda (CPA)</label>
-              <div class="box"><span>R$</span><input id="cpa" inputmode="decimal" placeholder="150,00"></div></div>
+              <div class="box"><span class="cur">R$</span><input id="cpa" inputmode="decimal" placeholder="150,00"></div></div>
           </div>
           <div class="divider"></div>
           <div class="in-row">
@@ -396,6 +443,7 @@ footer p{margin:14px 0 0}
           <div class="kpi"><p class="lbl">Faturamento / mês</p><p class="val" id="mFat">—</p></div>
           <div class="kpi"><p class="lbl">Tráfego / mês</p><p class="val" id="mAds">—</p></div>
           <div class="kpi"><p class="lbl">Lucro / mês</p><p class="val gold" id="mLucro">—</p></div>
+          <div class="kpi" id="boxLucroBrl" hidden><p class="lbl">Lucro / mês em reais</p><p class="val gold" id="mLucroBrl">—</p></div>
         </div>
       </div>
     </div>
@@ -420,7 +468,7 @@ footer p{margin:14px 0 0}
           <div class="num"><div><strong id="scoreNum">—</strong><span id="scoreOf">de 100</span></div></div>
         </div>
         <p class="band" id="band">Comece pelas notas</p>
-        <p class="band-note" id="bandNote">0 de 9 critérios avaliados</p>
+        <p class="band-note" id="bandNote">0 de 10 critérios avaliados</p>
         <div class="fix" id="fixBox" hidden>
           <h4>Onde mexer primeiro</h4>
           <ol id="fix"></ol>
@@ -488,9 +536,24 @@ function num(id){
   var n = parseFloat(v); return isFinite(n) ? n : 0;
 }
 function vazio(id){ return $(id).value.trim() === ''; }
-var BRL = new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'});
-var BRL0 = new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0});
-function brl(v){ return BRL.format(v); }
+/* a moeda segue o mercado da oferta; brl() formata na moeda escolhida */
+var MOEDA = 'BRL';
+function brl(v){ return new Intl.NumberFormat('pt-BR', {style:'currency', currency:MOEDA}).format(v); }
+var BRL0 = {format:function(v){ return new Intl.NumberFormat('pt-BR', {style:'currency', currency:MOEDA, maximumFractionDigits:0}).format(v); }};
+function reais0(v){ return new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0}).format(v); }
+function simbolo(m){
+  var p = new Intl.NumberFormat('pt-BR', {style:'currency', currency:m}).formatToParts(0);
+  for(var i = 0; i < p.length; i++) if(p[i].type === 'currency') return p[i].value;
+  return m;
+}
+function trocaMoeda(m){
+  MOEDA = m; $('moeda').value = m;
+  document.querySelectorAll('.cur').forEach(function(el){ el.textContent = simbolo(m); });
+  $('curCode').textContent = m;
+  $('boxCambio').hidden = m === 'BRL';
+  calcula();
+}
+$('moeda').addEventListener('change', function(){ trocaMoeda(this.value); });
 function pct(v){ return (v * 100).toLocaleString('pt-BR', {maximumFractionDigits:1}) + '%'; }
 function x(v){ return v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) + '×'; }
 
@@ -524,7 +587,8 @@ function calcula(){
   if(!conta){
     ['oLucro','oCpaMax','oCpaAlvo','oRoasMin','oRoas','mFat','mAds','mLucro'].forEach(function(id){ $(id).textContent = '—'; $(id).classList.remove('neg'); });
     $('oMargem').textContent = 'margem líquida';
-    $('oReceita').textContent = 'R$ 0';
+    $('oReceita').textContent = brl(0);
+    $('boxLucroBrl').hidden = true;
     pintaBarra([0,0,0,0,0,0], 0);
     atualizaScore(); return;
   }
@@ -557,6 +621,14 @@ function calcula(){
     $('mLucro').textContent = BRL0.format(lucro * vendas);
     $('mLucro').classList.toggle('neg', lucro < 0);
   } else { ['mFat','mAds','mLucro'].forEach(function(id){ $(id).textContent = '—'; }); }
+  var cambio = num('cambio');
+  var mostraBrl = MOEDA !== 'BRL' && cambio > 0 && vendas > 0;
+  $('boxLucroBrl').hidden = !mostraBrl;
+  if(mostraBrl){
+    $('mLucroBrl').textContent = reais0(lucro * vendas * cambio);
+    $('mLucroBrl').classList.toggle('neg', lucro < 0);
+  }
+  conta.cambio = MOEDA !== 'BRL' && cambio > 0 ? cambio : 0;
 
   pintaBarra([plataforma, imposto, comissao, entrega, cpa, lucro], receita);
   atualizaScore();
@@ -593,6 +665,7 @@ var CRITERIOS = [
   ['dor',       'Dor urgente e reconhecida',      'O público sabe que tem o problema e quer resolver agora, não “um dia”.', 3, 'nem percebe o problema', 'quer resolver hoje'],
   ['promessa',  'Promessa clara e específica',    'Resultado concreto, com prazo, que cabe numa frase de anúncio.', 3, 'vaga', 'cristalina'],
   ['publico',   'Público alcançável e com dinheiro', 'Dá para achar essa pessoa no tráfego e ela pode pagar o preço.', 2, 'difícil de achar', 'fácil e com verba'],
+  ['mercado',   'Encaixe com o mercado',          '', 2, 'não conversa', 'feita para ele'],
   ['mecanismo', 'Mecanismo único',                'Existe um “porquê funciona” que soa novo para quem já tentou de tudo.', 2, 'mais do mesmo', 'inédito'],
   ['prova',     'Prova',                          'Depoimentos, números e cases que sustentam a promessa.', 2, 'nenhuma', 'de sobra'],
   ['valor',     'Valor percebido acima do preço', 'Quem compra sente que está pagando pouco pelo que leva.', 2, 'caro', 'barato pelo que é'],
@@ -606,7 +679,7 @@ CRITERIOS.forEach(function(c){
   var d = document.createElement('div');
   d.className = 'crit'; d.id = 'c_' + c[0];
   var alto = c[3] >= 3;
-  var html = '<div class="t"><div><b>' + c[1] + '</b><p>' + c[2] + '</p></div>' +
+  var html = '<div class="t"><div><b>' + c[1] + '</b><p id="d_' + c[0] + '">' + c[2] + '</p></div>' +
     '<span class="peso' + (alto ? ' alto' : '') + '">Peso ' + c[3] + '</span></div>';
   if(c[6]){
     html += '<div class="auto" id="autoMargem">Preencha preço e CPA na calculadora.</div>';
@@ -699,11 +772,38 @@ function atualizaScore(){
   }).join('');
 }
 
+/* ---------- mercado ---------- */
+var MERCADO = 'br';
+var MERCADOS = {
+  br:     {nome:'Brasil', ph:'', desc:'A promessa e a linguagem soam brasileiras, e o público daqui ainda não está cansado dessa promessa.'},
+  pais:   {nome:'Outro país', ph:'Qual país? Ex.: Portugal, EUA, México', desc:'Idioma, cultura e poder de compra desse país combinam com a promessa e com o preço, e a oferta não é só uma tradução.'},
+  global: {nome:'Global', ph:'Países principais (opcional)', desc:'A oferta funciona em vários países sem depender de algo só do Brasil, e o preço cabe no bolso dos países-alvo.'}
+};
+function nomeMercado(){
+  var p = $('pais').value.trim();
+  if(MERCADO === 'br') return 'Brasil';
+  if(MERCADO === 'pais') return p || 'Outro país';
+  return 'Global' + (p ? ' (' + p + ')' : '');
+}
+function trocaMercado(m){
+  MERCADO = m;
+  $('mercado').querySelectorAll('button').forEach(function(b){ b.setAttribute('aria-checked', String(b.dataset.m === m)); });
+  $('pais').hidden = m === 'br';
+  $('pais').placeholder = MERCADOS[m].ph;
+  $('d_mercado').textContent = MERCADOS[m].desc;
+  /* Brasil vende em real; fora, o padrao e dolar ate alguem trocar */
+  if(m === 'br') trocaMoeda('BRL');
+  else if(MOEDA === 'BRL') trocaMoeda('USD');
+}
+$('mercado').addEventListener('click', function(e){
+  var b = e.target.closest('button[data-m]'); if(b) trocaMercado(b.dataset.m);
+});
+
 /* ---------- resumo e limpeza ---------- */
 function resumo(){
   var L = [];
   var nome = $('nome').value.trim() || 'Oferta sem nome';
-  L.push('MAPA DE OFERTA · ' + nome.toUpperCase(), '');
+  L.push('MAPA DE OFERTA · ' + nome.toUpperCase(), 'Mercado: ' + nomeMercado() + ' · moeda ' + MOEDA, '');
   CAMPOS.forEach(function(c){
     var v = $('m_' + c[0]).value.trim();
     if(v) L.push(c[1] + ': ' + v.replace(/\s*\n\s*/g, ' / '));
@@ -713,6 +813,7 @@ function resumo(){
     L.push('Receita: ' + brl(conta.receita));
     L.push('Fica antes do tráfego: ' + brl(conta.liquido) + ' (CPA máximo)');
     if(conta.temCpa) L.push('CPA: ' + brl(conta.cpa) + ' → lucro ' + brl(conta.lucro) + ' (' + pct(conta.margem) + ')');
+    if(conta.cambio && conta.vendas > 0) L.push('Lucro do mês em reais (cotação ' + conta.cambio.toLocaleString('pt-BR') + '): ' + reais0(conta.lucro * conta.vendas * conta.cambio));
     if(conta.cpaAlvo > 0) L.push('CPA para ' + pct(conta.alvo) + ' de margem: ' + brl(conta.cpaAlvo));
   }
   if(resultado){
@@ -735,25 +836,25 @@ function fallback(txt){
   t.remove();
 }
 function temAlgo(){
-  if($('nome').value.trim()) return true;
+  if($('nome').value.trim() || $('pais').value.trim()) return true;
   if(CAMPOS.some(function(c){ return $('m_' + c[0]).value.trim(); })) return true;
   if(!vazio('preco') || !vazio('cpa')) return true;
   return CRITERIOS.some(function(c){ return !c[6] && notas[c[0]] !== undefined; });
 }
 $('limpar').addEventListener('click', function(){
   if(temAlgo() && !confirm('Apagar tudo e começar outra oferta? Copie o resumo antes se quiser guardar.')) return;
-  $('nome').value = '';
+  $('nome').value = ''; $('pais').value = ''; $('cambio').value = '';
   CAMPOS.forEach(function(c){ $('m_' + c[0]).value = ''; });
   ['preco','extra','cpa','vendas'].forEach(function(id){ $(id).value = ''; });
   notas = {};
   document.querySelectorAll('.rate button').forEach(function(b){ b.setAttribute('aria-pressed', 'false'); });
   document.querySelectorAll('.crit').forEach(function(c){ c.classList.remove('done'); });
-  atualizaMapa(); calcula(); window.scrollTo(0, 0); avisa('Pronto para a próxima');
+  trocaMercado('br'); atualizaMapa(); calcula(); window.scrollTo(0, 0); avisa('Pronto para a próxima');
 });
 /* nada e salvo: avisa antes de fechar com coisa preenchida */
 addEventListener('beforeunload', function(e){ if(temAlgo()){ e.preventDefault(); e.returnValue = ''; } });
 
-atualizaMapa(); calcula();
+trocaMercado('br'); atualizaMapa(); calcula();
 </script>
 
 </body>
