@@ -66,6 +66,11 @@ como **rascunho**: proposta inicial, ainda não validada com resultado de
 campanha. As taxas da calculadora (9,9% + R$ 1,00 de plataforma, 6% de imposto)
 são só valor de partida, editável na tela.
 
+O **mercado** (Brasil, outro país ou global, com o país escrito) troca a moeda
+da calculadora — Brasil fica em real, fora vira dólar até alguém escolher outra —
+e, com cotação informada, mostra o lucro do mês em reais. Ele também ajusta o
+texto do critério "Encaixe com o mercado" no score.
+
 ## O que este projeto não tem, de propósito
 
 Não há servidor, banco de dados nem etapa de build. **Nenhuma página grava dado
