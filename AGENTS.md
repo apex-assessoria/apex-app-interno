@@ -103,7 +103,13 @@ Ofertas publicadas:
 ```
 oferta/midia-indoor/     mídia indoor com IA: o cliente manda a foto e recebe os vídeos
                          (o endereço antigo /oferta/tv-restaurante/ redireciona)
+oferta/validacao-pix/    validação de Pix no WhatsApp: a IA lê o comprovante e o
+                         colaborador libera pelo app ou navegador
 ```
+
+A oferta de validação de Pix descreve um produto **com servidor e dado de
+cliente** (comprovante, conta da loja). Se for construída, nasce como projeto
+próprio, em repositório privado, não aqui.
 
 ## O que este projeto não tem, de propósito
 
