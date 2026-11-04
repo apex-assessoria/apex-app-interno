@@ -1,4 +1,16 @@
 {
   "cleanUrls": true,
-  "trailingSlash": true
+  "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/oferta/tv-restaurante",
+      "destination": "/oferta/midia-indoor/",
+      "permanent": false
+    },
+    {
+      "source": "/oferta/tv-restaurante/",
+      "destination": "/oferta/midia-indoor/",
+      "permanent": false
+    }
+  ]
 }
