@@ -168,6 +168,17 @@ pode entrar     a página, o texto, o que já está no ar
 não pode        chave, token, senha, dado de cliente
 ```
 
+### Provisório: as ofertas vão migrar
+
+As ofertas em `oferta/<nome>/` são **rascunho de trabalho**: ficam aqui só
+para validar o que entra e o que não entra. O destino é um ambiente **todo
+privado** — repositório privado, Vercel no plano pago, banco na Neon, com
+login e permissão por membro. Lá dentro cada membro vê as ofertas.
+
+Até a migração, vale lembrar: o que for escrito aqui fica legível no GitHub e
+pelo link da página. Quando o ambiente privado existir, as ofertas saem
+daqui, e esta seção se atualiza.
+
 O método da casa — nomenclatura, abertura de cliente, padrões de trabalho —
 mora no repositório `contexto`, que é privado. Regra escrita aqui fica legível
 por qualquer pessoa, e **fechar o repositório depois não apaga o que já foi
