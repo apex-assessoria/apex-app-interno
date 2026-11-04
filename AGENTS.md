@@ -20,7 +20,7 @@ relatoriozeus/      o relatório de um cliente, uma pasta por cliente
 oferta/             ferramenta interna: mapa de oferta, margem e score
 oferta/<nome>/      a mesma tela, já preenchida com uma oferta
 referencia/         o site institucional clonado, NÃO publicado
-vercel.json         cleanUrls e trailingSlash
+vercel.json         cleanUrls, trailingSlash e redirecionamentos
 .vercelignore       o que não vai para o ar
 ```
 
@@ -101,7 +101,8 @@ subagentes vão entrar depois — a página continua sem servidor.
 Ofertas publicadas:
 
 ```
-oferta/tv-restaurante/   vídeos com IA para a TV de restaurante e hamburgueria
+oferta/midia-indoor/     mídia indoor com IA para restaurantes, tudo online
+                         (o endereço antigo /oferta/tv-restaurante/ redireciona)
 ```
 
 ## O que este projeto não tem, de propósito

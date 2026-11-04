@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Vídeos com IA para a TV do restaurante · Mapa de Oferta · APEX</title>
+<title>Mídia indoor com IA para restaurantes · Mapa de Oferta · APEX</title>
 <meta name="description" content="Ferramenta interna da APEX: mapa da oferta, calculadora de margem e score.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#070605">
@@ -252,7 +252,7 @@
 /* A OFERTA. So isto muda de uma pagina para outra.
    Campo vazio fica vazio na tela; nota fora de 0 a 5 e ignorada. */
 window.OFERTA = {
-  nome: 'Vídeos com IA para a TV do restaurante',
+  nome: 'Mídia indoor com IA para restaurantes',
   link: '',
   mercado: 'br',
   pais: '',
@@ -260,11 +260,11 @@ window.OFERTA = {
   cambio: '',
   mapa: {
     publico: 'Começar por hamburguerias com TV no salão ou no balcão. Depois: restaurantes, cafeterias e lojas.',
-    dor: 'A TV do salão fica desligada ou passando qualquer coisa. O dono não tem tempo nem quem faça vídeo do cardápio, e a promoção não aparece para quem já está dentro da loja.',
+    dor: 'A TV do salão fica desligada ou passando qualquer coisa. O dono não tem tempo nem quem faça vídeo do cardápio, não tem como trocar o que passa na TV, e a promoção não aparece para quem já está dentro da loja.',
     desejo: 'Que quem está na fila peça mais (o combo, a sobremesa, o adicional) sem ninguém precisar oferecer.',
-    promessa: 'Rascunho: sua TV vendendo o seu cardápio, com vídeos dos seus pratos feitos com IA e prontos para rodar no salão.',
-    mecanismo: 'Vídeos feitos com IA a partir das fotos reais dos pratos, em loop pensado para quem está decidindo o pedido. O mesmo material vira stories, status do WhatsApp e cardápio digital.',
-    entrega: 'Vídeos em loop para a TV, atualizados com as promoções. A definir: quantos vídeos por mês e como o vídeo chega na TV.',
+    promessa: 'Rascunho: mídia indoor que vende o seu cardápio. A TV do salão passa vídeos dos seus pratos feitos com IA, e a gente atualiza tudo online, sem você mexer em nada.',
+    mecanismo: 'Mídia indoor 100% online: a TV abre um link e toca a programação em loop. A Apex troca os vídeos de longe, sem pendrive e sem visita. Os vídeos são feitos com IA a partir das fotos reais dos pratos, e o mesmo material vira stories, status do WhatsApp e cardápio digital.',
+    entrega: 'Programação de mídia indoor rodando online na TV do salão, atualizada com as promoções. A definir: quantos vídeos por mês e de quanto em quanto tempo a programação muda.',
     bonus: 'Os mesmos vídeos cortados na vertical para stories e status do WhatsApp.',
     prova: 'Ainda não tem: falta o primeiro case com as vendas de antes e de depois.',
     garantia: 'A definir.',
@@ -278,7 +278,7 @@ window.OFERTA = {
      ficam sem nota ate existir preco e garantia */
   notas: { dor: 2, promessa: 2, publico: 4, mercado: 4, mecanismo: 3, prova: 1, diferenca: 3 },
   depurador: {
-    versao: 'v1 · 04/11/2026 · primeira leitura, sem página de vendas',
+    versao: 'v2 · 04/11/2026 · reposicionada como mídia indoor online',
     achados: [
       { prioridade: 'alta', titulo: 'A promessa vende o meio, não o resultado',
         vimos: 'Hoje a oferta é “vídeo com IA na TV”. O dono da hamburgueria não compra vídeo: compra pedido maior.',
@@ -286,9 +286,12 @@ window.OFERTA = {
       { prioridade: 'alta', titulo: 'Falta a primeira prova',
         vimos: 'Sem case, a promessa depende só da conversa de venda.',
         fazer: 'Fazer 2 ou 3 pilotos de graça ou a preço simbólico, em troca dos números de venda e de um depoimento em vídeo do dono. O primeiro case vira o anúncio.' },
-      { prioridade: 'alta', titulo: 'Como o vídeo chega na TV ainda não está resolvido',
-        vimos: 'Pendrive, smart TV, TV box ou navegador: cada loja é um caso, e instalação difícil derruba a venda.',
-        fazer: 'Definir um caminho único e simples. Uma ideia: um link por cliente que toca o loop no navegador da TV e se atualiza sozinho quando vocês trocam o vídeo, sem visita técnica. Pode morar neste mesmo app.' },
+      { prioridade: 'alta', titulo: 'Usar o nome “mídia indoor” a favor',
+        vimos: 'Mídia indoor é uma categoria que o comerciante já ouviu falar. “Vídeo com IA” é novidade e precisa ser explicada.',
+        fazer: 'Abrir a conversa com “mídia indoor para o seu salão” e deixar a IA como o motivo de ser rápido e barato, não como o produto. Mostrar a TV rodando no celular durante a visita.' },
+      { prioridade: 'media', titulo: 'Tudo online: falta escolher o player',
+        vimos: 'A decisão de ser mídia indoor online resolve o pendrive e a visita técnica. Ainda falta definir o que fica ligado na TV: o navegador da smart TV, uma TV box ou um app de sinalização.',
+        fazer: 'Testar o link no navegador de 2 ou 3 TVs comuns de restaurante antes de vender. Se a smart TV travar, padronizar uma TV box barata no kit de entrada. O link de cada cliente pode morar neste mesmo app.' },
       { prioridade: 'media', titulo: 'Começar por um nicho só',
         vimos: '“Lojas, restaurantes, hamburguerias” é amplo, e a mensagem fica genérica.',
         fazer: 'Abrir só com hamburguerias: comida muito visual, combos e adicionais que sobem o ticket fácil, e muitas já têm TV no salão. Os outros nichos vêm depois do primeiro case.' },
@@ -298,6 +301,9 @@ window.OFERTA = {
       { prioridade: 'media', titulo: 'O concorrente é o próprio dono com uma ferramenta',
         vimos: 'Ferramentas como FlexClip e Canva têm modelos prontos de vídeo de restaurante.',
         fazer: 'O diferencial não pode ser “vídeo com IA”. Tem que ser “feito para você, com o seu prato de verdade, atualizado toda semana com a sua promoção”.' },
+      { prioridade: 'baixa', titulo: 'Ideia: a TV pode pagar a si mesma',
+        vimos: 'Em mídia indoor, o espaço na tela também pode ser vendido para anunciantes de fora.',
+        fazer: 'Mais à frente, reservar parte da programação para anunciantes locais que não concorrem com o restaurante (academia, barbearia, imobiliária). Parte dessa receita abate a mensalidade do dono. Só depois que a oferta principal estiver rodando.' },
       { prioridade: 'baixa', titulo: 'Preço e formato em aberto',
         vimos: 'Sem preço, a calculadora e as notas de valor, risco e margem ficam vazias.',
         fazer: 'Definir mensalidade e setup. Na calculadora: preço = mensalidade, plataforma = taxa do gateway, entrega = custo de IA + horas por cliente, CPA = quanto custa fechar um restaurante.' }
@@ -309,6 +315,8 @@ window.OFERTA = {
         porque: 'A alternativa grátis que o dono já conhece. É a régua do mínimo que ele espera ver.' },
       { nome: 'Yodeck e ScreenCloud', url: 'yodeck.com · screencloud.com',
         porque: 'Plataformas de sinalização digital: como o conteúdo chega na TV do cliente e é trocado à distância.' },
+      { nome: 'Eletromidia', url: 'eletromidia.com.br',
+        porque: 'Uma das maiores empresas de mídia fora de casa do Brasil, com telas em elevadores e outros espaços. É referência de como a mídia indoor é vendida para anunciantes.' },
       { nome: 'Goomer e Anota AI', url: 'goomer.com.br · anota.ai',
         porque: 'Cardápio digital e pedidos no Brasil: concorrência e régua de preço para o upsell do cardápio.' }
     ]
