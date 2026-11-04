@@ -313,7 +313,7 @@ function resumo(){
   var L = [];
   var nome = $('nome').value.trim() || 'Oferta sem nome';
   L.push('MAPA DE OFERTA · ' + nome.toUpperCase(), 'Mercado: ' + nomeMercado() + ' · moeda ' + MOEDA);
-  if(window.OFERTA && window.OFERTA.link) L.push('Página: ' + window.OFERTA.link);
+  if($('depLink').value.trim()) L.push('Página: ' + $('depLink').value.trim());
   L.push('');
   CAMPOS.forEach(function(c){
     var v = $('m_' + c[0]).value.trim();
@@ -334,20 +334,21 @@ function resumo(){
   return L.join('\n');
 }
 function avisa(t){ $('toast').textContent = t; clearTimeout(avisa.t); avisa.t = setTimeout(function(){ $('toast').textContent = ''; }, 2600); }
-$('copiar').addEventListener('click', function(){
-  var txt = resumo();
+function copia(txt, msg, onde){
+  var ok = function(){ (onde || avisa)(msg); };
   if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(txt).then(function(){ avisa('Resumo copiado'); }, function(){ fallback(txt); });
-  } else fallback(txt);
-});
-function fallback(txt){
+    navigator.clipboard.writeText(txt).then(ok, function(){ fallback(txt, ok); });
+  } else fallback(txt, ok);
+}
+$('copiar').addEventListener('click', function(){ copia(resumo(), 'Resumo copiado'); });
+function fallback(txt, ok){
   var t = document.createElement('textarea'); t.value = txt; t.style.position = 'fixed'; t.style.opacity = '0';
   document.body.appendChild(t); t.select();
-  try{ document.execCommand('copy'); avisa('Resumo copiado'); }catch(e){ avisa('Não deu para copiar'); }
+  try{ document.execCommand('copy'); ok(); }catch(e){ avisa('Não deu para copiar'); }
   t.remove();
 }
 function temAlgo(){
-  if($('nome').value.trim() || $('pais').value.trim()) return true;
+  if($('nome').value.trim() || $('pais').value.trim() || $('depLink').value.trim()) return true;
   if(CAMPOS.some(function(c){ return $('m_' + c[0]).value.trim(); })) return true;
   if(!vazio('preco') || !vazio('cpa')) return true;
   return CRITERIOS.some(function(c){ return !c[6] && notas[c[0]] !== undefined; });
@@ -359,7 +360,7 @@ $('limpar').addEventListener('click', function(){
     aplicaOferta(window.OFERTA); window.scrollTo(0, 0); avisa('Oferta restaurada'); return;
   }
   if(temAlgo() && !confirm('Apagar tudo e começar outra oferta? Copie o resumo antes se quiser guardar.')) return;
-  $('nome').value = ''; $('pais').value = ''; $('cambio').value = '';
+  $('nome').value = ''; $('pais').value = ''; $('cambio').value = ''; $('depLink').value = '';
   CAMPOS.forEach(function(c){ $('m_' + c[0]).value = ''; });
   ['preco','extra','cpa','vendas'].forEach(function(id){ $(id).value = ''; });
   notas = {};
@@ -368,6 +369,51 @@ $('limpar').addEventListener('click', function(){
   trocaMercado('br'); atualizaMapa(); calcula(); window.scrollTo(0, 0); avisa('Pronto para a próxima');
 });
 /* nada e salvo: avisa antes de fechar com coisa preenchida */
+/* ---------- 04 · depurador ---------- */
+function esc(t){ return String(t == null ? '' : t).replace(/[&<>"]/g, function(ch){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]; }); }
+var PRIO = {alta:'Alta', media:'Média', baixa:'Baixa'};
+function mostraDepurador(d){
+  d = d || {};
+  var ach = d.achados || [], refs = d.referencias || [];
+  $('achados').innerHTML = ach.length ? ach.map(function(a){
+    var p = PRIO[a.prioridade] ? a.prioridade : 'baixa';
+    return '<article class="achado"><div class="t"><b>' + esc(a.titulo) + '</b><span class="prio ' + p + '">' + PRIO[p] + '</span></div>' +
+      '<dl><div><dt>O que vimos</dt><dd>' + esc(a.vimos) + '</dd></div>' +
+      '<div><dt>O que fazer</dt><dd class="fazer">' + esc(a.fazer) + '</dd></div></dl></article>';
+  }).join('') : '<p class="vazio">Nenhum diagnóstico ainda. A resposta da análise vira esta lista na página da oferta.</p>';
+  $('refs').innerHTML = refs.length ? refs.map(function(r){
+    return '<div class="ref"><b>' + esc(r.nome) + '</b>' + (r.url ? '<span class="url">' + esc(r.url) + '</span>' : '') + '<p>' + esc(r.porque) + '</p></div>';
+  }).join('') : '<p class="vazio">Sem referências ainda.</p>';
+  $('depVer').hidden = !d.versao;
+  $('depVer').textContent = d.versao ? 'Diagnóstico ' + d.versao : '';
+}
+function depToast(t){ $('depToast').textContent = t; clearTimeout(depToast.t); depToast.t = setTimeout(function(){ $('depToast').textContent = ''; }, 2600); }
+
+/* o pedido que vai para o Claude (e, depois, para os subagentes) */
+function pedido(){
+  var link = $('depLink').value.trim();
+  var d = (window.OFERTA && window.OFERTA.depurador) || {};
+  var L = [
+    'Você é estrategista de direct response da APEX. Analise a oferta abaixo e me devolva:',
+    '1. Os problemas que mais custam venda, por prioridade (alta, média, baixa). Para cada um: título, o que você viu e o que fazer.',
+    '2. Até 5 referências para estudar (empresas, ofertas ou páginas parecidas), com o porquê de cada uma.',
+    '3. A nota de 0 a 5 que você daria em cada critério do score, com uma linha de justificativa.',
+    'Não invente número que não está na página ou nos dados abaixo; quando faltar, diga o que falta.',
+    '',
+    'Link da oferta: ' + (link || '(sem link: analise só os dados abaixo)'),
+    '',
+    resumo()
+  ];
+  var ach = d.achados || [];
+  if(ach.length){
+    L.push('', 'JÁ ACHADO ANTES (confirme, descarte ou aprofunde):');
+    ach.forEach(function(a){ L.push('· [' + (PRIO[a.prioridade] || 'Baixa') + '] ' + a.titulo + ': ' + a.fazer); });
+  }
+  L.push('', 'CRITÉRIOS DO SCORE: ' + CRITERIOS.map(function(c){ return c[1] + ' (peso ' + c[3] + ')'; }).join('; ') + '.');
+  return L.join('\n');
+}
+$('pedir').addEventListener('click', function(){ copia(pedido(), 'Pedido copiado: cole no Claude', depToast); });
+
 /* "sujo" = alguem mexeu desde que a pagina abriu */
 var sujo = false;
 document.addEventListener('input', function(){ sujo = true; });
@@ -397,6 +443,8 @@ function aplicaOferta(o){
     box.querySelectorAll('.rate button').forEach(function(b){ b.setAttribute('aria-pressed', String(notas[c[0]] === +b.dataset.n)); });
     box.classList.toggle('done', notas[c[0]] !== undefined);
   });
+  poe('depLink', o.link || '');
+  mostraDepurador(o.depurador);
   if($('fonte')){
     $('fonte').hidden = !o.link;
     $('fonteUrl').textContent = o.link || '';
