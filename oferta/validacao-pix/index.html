@@ -265,10 +265,10 @@ window.OFERTA = {
     promessa: 'Rascunho: o comprovante chega no WhatsApp, a IA lê e confere, e o seu funcionário só libera o que caiu na conta, pelo celular ou pelo computador.',
     mecanismo: 'O cliente manda o comprovante no WhatsApp da loja. A IA lê a imagem e tira valor, data, hora, pagador, banco e o ID da transação (o E2E). O sistema cruza esses dados com a conta da loja (API do banco, gateway ou Open Finance) e marca o resultado: caiu, não caiu, agendado ou repetido. O colaborador vê a fila numa tela, no app ou no navegador, e aperta “liberar”. (Mecanismo a construir.)',
     entrega: 'Número de WhatsApp oficial ligado ao sistema, a tela do colaborador (app instalável e navegador), o painel do dono com o histórico de quem liberou o quê, e a conexão com a conta da loja. A definir: quais bancos e gateways entram primeiro.',
-    bonus: 'Alerta de comprovante repetido, aviso de Pix agendado e o relatório do dia com o que entrou por funcionário.',
+    bonus: 'Alerta de comprovante repetido, aviso de Pix agendado e o relatório do dia com o que entrou por funcionário. Próximo degrau: o supervisor de vendas com IA, que acompanha a ligação e o chat de cada vendedor.',
     prova: 'Ainda não tem. O mercado já paga: a ValidaPix validou R$ 200 milhões e faturava R$ 40 mil por mês em 2023.',
     garantia: 'A definir. Ideia: teste grátis de 7 dias, sem cartão. A ValidaPix dá 3.',
-    preco: 'A definir. Régua do mercado: ValidaPix de R$ 69,90 a R$ 250 por mês, sem taxa por transação; PixConfirm de R$ 29,90 a R$ 199,90 (a confirmar). Hipótese: mensal por número de WhatsApp, com limite de comprovantes.'
+    preco: 'A definir. Régua do mercado: ValidaPix de R$ 69,90 a R$ 250 por mês, sem taxa por transação; PixConfirm de R$ 29,90 a R$ 199,90 (a confirmar). Hipótese: mensal por número de WhatsApp, com limite de comprovantes. Upsell: supervisor de vendas com IA, cobrado por vendedor.'
   },
   /* SaaS, nao infoproduto: preco = mensalidade, entrega = custo de IA
      e de WhatsApp por cliente no mes, CPA = custo para fechar uma loja */
@@ -280,7 +280,7 @@ window.OFERTA = {
      ate existir preco e garantia */
   notas: { dor: 5, promessa: 3, publico: 3, mercado: 4, mecanismo: 3, prova: 1, diferenca: 3 },
   depurador: {
-    versao: 'v1 · 04/11/2026 · pesquisa de mercado e a ideia da tela do colaborador',
+    versao: 'v2 · 04/11/2026 · entra o supervisor de vendas com IA na ligação e no chat',
     achados: [
       { prioridade: 'alta', titulo: 'A IA que lê o print não prova que o Pix caiu',
         vimos: 'Comprovante falso é feito justamente para parecer verdadeiro, e hoje até por IA. Ler a imagem, sozinha, só ajuda a desconfiar.',
@@ -303,6 +303,9 @@ window.OFERTA = {
       { prioridade: 'media', titulo: 'Falta a primeira prova',
         vimos: 'Sem case, a promessa é só conversa.',
         fazer: 'Piloto com 2 ou 3 lojas que vendem pelo WhatsApp: contar quantos comprovantes passaram, quanto tempo o pedido levou para ser liberado e se apareceu algum falso.' },
+      { prioridade: 'media', titulo: 'Próximo degrau: supervisor de vendas com IA',
+        vimos: 'Quem já liga o WhatsApp da loja e a equipe ao sistema por causa do Pix abriu a porta para o resto da venda. O dono não sabe o que o vendedor fala na ligação nem no chat, e só descobre a venda perdida no fim do mês.',
+        fazer: 'Upsell cobrado por vendedor: a IA acompanha o chat e a ligação, dá nota a cada atendimento, aponta a objeção que travou a venda, o cliente que ficou sem resposta e o follow-up esquecido, e manda ao dono o resumo do dia. A ligação precisa avisar que está sendo gravada (LGPD). Começar pelo chat, que já passa pelo sistema; a ligação vem depois, porque exige telefonia integrada.' },
       { prioridade: 'baixa', titulo: 'Preço: mensalidade fixa ganha do pequeno',
         vimos: 'Os validadores cobram mensalidade sem taxa por transação. Os gateways cobram por Pix.',
         fazer: 'Seguir a mensalidade, com faixa por volume de comprovantes. Na calculadora: preço = mensalidade, entrega = custo de IA e de WhatsApp por cliente no mês, CPA = quanto custa fechar uma loja.' }
@@ -319,7 +322,11 @@ window.OFERTA = {
       { nome: 'Jota', url: 'jota.ai',
         porque: 'Assistente no WhatsApp que usa Open Finance para avisar o Pix recebido. Mostra o caminho sem gateway.' },
       { nome: 'Meta · Payments API Brasil', url: 'docs.360dialog.com',
-        porque: 'Pix dinâmico dentro da conversa, pelo canal oficial. É o caminho para quando a loja quiser cobrar, além de conferir.' }
+        porque: 'Pix dinâmico dentro da conversa, pelo canal oficial. É o caminho para quando a loja quiser cobrar, além de conferir.' },
+      { nome: 'RD Station CRM · IA para negociações', url: 'rdstation.com/produtos/crm/ia-para-negociacoes',
+        porque: 'Referência do supervisor: registra ligação, videochamada e WhatsApp, e mostra ao gestor as objeções, os concorrentes citados e onde cada vendedor melhora. É add-on, sem preço na página.' },
+      { nome: 'HelenaCRM · Supervisor de IA', url: 'diariodocomercio.com.br',
+        porque: 'Supervisor com IA no WhatsApp, lançado em Minas: lê cada mensagem e decide qual agente assume. Mostra como o mercado já usa a palavra “supervisor”, mas para coordenar robôs, não para avaliar vendedor.' }
     ]
   }
 };
