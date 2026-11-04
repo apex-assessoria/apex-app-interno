@@ -101,7 +101,7 @@ subagentes vão entrar depois — a página continua sem servidor.
 Ofertas publicadas:
 
 ```
-oferta/midia-indoor/     mídia indoor com IA para restaurantes, tudo online
+oferta/midia-indoor/     mídia indoor com IA: o cliente manda a foto e recebe os vídeos
                          (o endereço antigo /oferta/tv-restaurante/ redireciona)
 ```
 
