@@ -1,3 +1,6 @@
 # Nao publicar: material de referencia de design.
 # O arquivo continua no Git e no disco — so nao e servido na web.
 referencia/
+
+# Modelo da pagina de uma oferta: copiar para oferta/<nome>/ e preencher.
+oferta/_modelo/

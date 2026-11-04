@@ -18,6 +18,7 @@ index.html          a raiz — página mínima da marca, sem link nenhum
 404.html            a página de erro, mesma cara
 relatoriozeus/      o relatório de um cliente, uma pasta por cliente
 oferta/             ferramenta interna: mapa de oferta, margem e score
+oferta/<nome>/      a mesma tela, já preenchida com uma oferta
 referencia/         o site institucional clonado, NÃO publicado
 vercel.json         cleanUrls e trailingSlash
 .vercelignore       o que não vai para o ar
@@ -70,6 +71,38 @@ O **mercado** (Brasil, outro país ou global, com o país escrito) troca a moeda
 da calculadora — Brasil fica em real, fora vira dólar até alguém escolher outra —
 e, com cotação informada, mostra o lucro do mês em reais. Ele também ajusta o
 texto do critério "Encaixe com o mercado" no score.
+
+### Página de uma oferta
+
+O visual e o código moram em `oferta/oferta.css` e `oferta/oferta.js`, e
+**servem a ferramenta e todas as ofertas**: melhoria feita ali vale para todas.
+
+Cada oferta é uma pasta `oferta/<nome>/`, copiada de `oferta/_modelo/` (que o
+`.vercelignore` não publica). O que muda de uma para outra é só o bloco
+`window.OFERTA` no fim do arquivo: nome, link da página de vendas, mercado,
+os dez campos do mapa, as entradas da margem e as notas do score. A tela abre
+preenchida, dá para simular por cima, e "Voltar ao original" desfaz.
+
+O link da página de vendas aparece como texto, não como link clicável: a
+regra de não ter saída vale aqui também.
+
+### O depurador (bloco 04)
+
+Onde a oferta melhora. Tem o link da página de vendas, o que já foi achado
+(cada achado com prioridade, "o que vimos" e "o que fazer") e as referências
+para estudar. Os achados e as referências moram em `window.OFERTA.depurador`,
+e cada rodada de análise ganha uma `versao`.
+
+O botão **"Copiar pedido de análise"** monta o texto que vai para o Claude:
+o link, o resumo da oferta, o que já foi achado e os critérios do score. A
+resposta volta para o bloco `depurador` da página. É a porta por onde os
+subagentes vão entrar depois — a página continua sem servidor.
+
+Ofertas publicadas:
+
+```
+oferta/tv-restaurante/   vídeos com IA para a TV de restaurante e hamburgueria
+```
 
 ## O que este projeto não tem, de propósito
 

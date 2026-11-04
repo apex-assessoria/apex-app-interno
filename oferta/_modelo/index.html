@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NOME DA OFERTA · Mapa de Oferta · APEX</title>
+<meta name="description" content="Ferramenta interna da APEX: mapa da oferta, calculadora de margem e score.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#070605">
+<link rel="icon" href="/assets/icon-apex.png" sizes="512x512">
+<link rel="apple-touch-icon" href="/assets/icon-apex.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/oferta/oferta.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <div class="brand">
+      <img class="brand-mark" src="/assets/apex-mark.webp" alt="" width="119" height="113">
+      <img class="brand-word" src="/assets/apex-word.webp" alt="APEX" width="259" height="32">
+    </div>
+    <a class="live" href="#score" aria-label="Ir para o score">
+      <span class="lbl">Score</span><span class="pill" id="navScore">—</span>
+    </a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Oferta em análise <span class="tag">Mapa de Oferta</span></p>
+    <h1>Mapa de <em>Oferta</em></h1>
+    <p class="lead">A oferta já vem preenchida. Mexa à vontade para simular: nada é salvo, e “Voltar ao original” desfaz tudo.</p>
+    <div class="name-box">
+      <label for="nome">Oferta</label>
+      <input id="nome" type="text" placeholder="Nome da oferta ou do produto" autocomplete="off">
+    </div>
+    <div class="mkt">
+      <span class="mk-lbl" id="mktLbl">Mercado</span>
+      <div class="mkt-row">
+        <div class="segs" role="radiogroup" aria-labelledby="mktLbl" id="mercado">
+          <button type="button" role="radio" data-m="br" aria-checked="true">Brasil</button>
+          <button type="button" role="radio" data-m="pais" aria-checked="false">Outro país</button>
+          <button type="button" role="radio" data-m="global" aria-checked="false">Global</button>
+        </div>
+        <input id="pais" type="text" autocomplete="off" aria-label="País" hidden>
+      </div>
+    </div>
+    <p class="fonte" id="fonte" hidden><b>Página</b><span id="fonteUrl"></span></p>
+    <nav class="trail" aria-label="Etapas">
+      <a href="#mapa"><b>01</b>Mapa</a>
+      <a href="#margem"><b>02</b>Margem</a>
+      <a href="#score"><b>03</b>Score</a>
+      <a href="#depurador"><b>04</b>Depurador</a>
+    </nav>
+  </div>
+</div>
+
+<!-- 01 · MAPA -->
+<section id="mapa">
+  <div class="wrap">
+    <h2><span class="n">01</span>O mapa</h2>
+    <p class="sub">As peças da oferta, uma por cartão. Escreva curto: se não cabe em duas linhas, ainda não está claro.</p>
+    <div class="map-head">
+      <div class="meter"><span id="mapCount">0 de 10</span><span class="bar"><i id="mapBar"></i></span></div>
+    </div>
+    <div class="map" id="map"></div>
+  </div>
+</section>
+
+<!-- 02 · MARGEM -->
+<section id="margem">
+  <div class="wrap">
+    <h2><span class="n">02</span>A margem</h2>
+    <p class="sub">Infoproduto: quanto sobra de cada venda depois de plataforma, imposto, comissão e tráfego. <b>As taxas já vêm com um valor comum: confira com a plataforma e o contador.</b></p>
+
+    <div class="calc">
+      <div class="panel">
+        <h3>Entradas · por venda</h3>
+        <div class="inputs">
+          <div class="in-row">
+            <div class="in"><label for="moeda">Moeda da venda</label>
+              <div class="box"><select id="moeda">
+                <option value="BRL">Real (R$)</option>
+                <option value="USD">Dólar (US$)</option>
+                <option value="EUR">Euro (€)</option>
+                <option value="GBP">Libra (£)</option>
+                <option value="MXN">Peso mexicano</option>
+                <option value="COP">Peso colombiano</option>
+                <option value="CLP">Peso chileno</option>
+                <option value="ARS">Peso argentino</option>
+              </select></div></div>
+            <div class="in" id="boxCambio" hidden><label for="cambio">Cotação: 1 <span id="curCode">USD</span> em reais</label>
+              <div class="box"><span>R$</span><input id="cambio" inputmode="decimal" placeholder="5,40"></div>
+              <p class="note">Só para mostrar o lucro em reais.</p></div>
+          </div>
+          <div class="divider"></div>
+          <div class="in-row">
+            <div class="in"><label for="preco">Preço de venda</label>
+              <div class="box"><span class="cur">R$</span><input id="preco" inputmode="decimal" placeholder="497,00"></div></div>
+            <div class="in"><label for="extra">Order bump / upsell médio</label>
+              <div class="box"><span class="cur">R$</span><input id="extra" inputmode="decimal" placeholder="0,00"></div></div>
+          </div>
+          <div class="divider"></div>
+          <div class="in-row">
+            <div class="in"><label for="platPct">Taxa da plataforma</label>
+              <div class="box"><input id="platPct" inputmode="decimal" value="9,9"><span>%</span></div></div>
+            <div class="in"><label for="platFix">Taxa fixa por venda</label>
+              <div class="box"><span class="cur">R$</span><input id="platFix" inputmode="decimal" value="1,00"></div></div>
+          </div>
+          <div class="in-row">
+            <div class="in"><label for="imposto">Imposto sobre o faturamento</label>
+              <div class="box"><input id="imposto" inputmode="decimal" value="6"><span>%</span></div></div>
+            <div class="in"><label for="comissao">Comissão (afiliado / coprodução)</label>
+              <div class="box"><input id="comissao" inputmode="decimal" value="0"><span>%</span></div>
+              <p class="note">Sobre o preço de venda.</p></div>
+          </div>
+          <div class="in-row">
+            <div class="in"><label for="entrega">Custo de entrega</label>
+              <div class="box"><span class="cur">R$</span><input id="entrega" inputmode="decimal" value="0"></div>
+              <p class="note">Área de membros, suporte, mentoria.</p></div>
+            <div class="in"><label for="cpa">Custo de tráfego por venda (CPA)</label>
+              <div class="box"><span class="cur">R$</span><input id="cpa" inputmode="decimal" placeholder="150,00"></div></div>
+          </div>
+          <div class="divider"></div>
+          <div class="in-row">
+            <div class="in"><label for="alvo">Margem que você quer</label>
+              <div class="box"><input id="alvo" inputmode="decimal" value="30"><span>%</span></div></div>
+            <div class="in"><label for="vendas">Vendas por mês</label>
+              <div class="box"><input id="vendas" inputmode="numeric" placeholder="100"><span>un</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="outs">
+        <div class="big">
+          <div class="kpi"><p class="lbl">Lucro por venda</p><p class="val gold" id="oLucro">—</p><p class="note" id="oMargem">margem líquida</p></div>
+          <div class="kpi"><p class="lbl">CPA máximo</p><p class="val" id="oCpaMax">—</p><p class="note">acima disso, cada venda dá prejuízo</p></div>
+          <div class="kpi"><p class="lbl">CPA para a meta</p><p class="val" id="oCpaAlvo">—</p><p class="note" id="oCpaAlvoNote">para bater a margem que você quer</p></div>
+        </div>
+
+        <div class="panel">
+          <h3>Para onde vai cada venda de <span id="oReceita">R$ 0</span></h3>
+          <div class="fall">
+            <div class="track-box">
+              <div class="track" id="track">
+                <i style="background:var(--seg-1)"></i><i style="background:var(--seg-2)"></i><i style="background:var(--seg-3)"></i><i style="background:var(--seg-4)"></i><i style="background:var(--seg-5)"></i><i class="lucro"></i>
+              </div>
+              <span class="linha" id="linhaReceita" hidden><em>receita</em></span>
+            </div>
+            <div class="legend" id="legend"></div>
+          </div>
+        </div>
+
+        <div class="big">
+          <div class="kpi"><p class="lbl">ROAS de empate</p><p class="val" id="oRoasMin">—</p><p class="note">o mínimo que o tráfego precisa devolver</p></div>
+          <div class="kpi"><p class="lbl">ROAS atual</p><p class="val" id="oRoas">—</p><p class="note" id="oRoasNote">com o CPA informado</p></div>
+        </div>
+
+        <div class="month" id="month">
+          <div class="kpi"><p class="lbl">Faturamento / mês</p><p class="val" id="mFat">—</p></div>
+          <div class="kpi"><p class="lbl">Tráfego / mês</p><p class="val" id="mAds">—</p></div>
+          <div class="kpi"><p class="lbl">Lucro / mês</p><p class="val gold" id="mLucro">—</p></div>
+          <div class="kpi" id="boxLucroBrl" hidden><p class="lbl">Lucro / mês em reais</p><p class="val gold" id="mLucroBrl">—</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 · SCORE -->
+<section id="score">
+  <div class="wrap">
+    <h2><span class="n">03</span>O score</h2>
+    <p class="sub">Dê uma nota de 0 a 5 para cada ponto. Os critérios com peso alto puxam mais o resultado. A margem é preenchida pela calculadora acima.</p>
+
+    <div class="score">
+      <div class="crits" id="crits"></div>
+
+      <aside class="panel verdict" aria-live="polite">
+        <div class="gauge">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <circle class="bg" cx="50" cy="50" r="44"/>
+            <circle class="fg" id="gaugeFg" cx="50" cy="50" r="44" stroke-dasharray="276.46" stroke-dashoffset="276.46"/>
+          </svg>
+          <div class="num"><div><strong id="scoreNum">—</strong><span id="scoreOf">de 100</span></div></div>
+        </div>
+        <p class="band" id="band">Comece pelas notas</p>
+        <p class="band-note" id="bandNote">0 de 10 critérios avaliados</p>
+        <div class="fix" id="fixBox" hidden>
+          <h4>Onde mexer primeiro</h4>
+          <ol id="fix"></ol>
+        </div>
+        <p class="draft">Rascunho: os critérios e os pesos são um ponto de partida para a equipe ajustar. Ainda não foram validados com resultado de campanha.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · DEPURADOR -->
+<section id="depurador">
+  <div class="wrap">
+    <h2><span class="n">04</span>O depurador</h2>
+    <p class="sub">Onde a oferta melhora. Cole o link, leia o que já foi achado e copie o pedido de análise para mandar ao Claude. <b>Mais adiante, são os subagentes que respondem.</b></p>
+
+    <div class="dep">
+      <div class="panel">
+        <h3>A oferta no ar</h3>
+        <div class="in"><label for="depLink">Link da página de vendas</label>
+          <div class="box"><input id="depLink" type="url" inputmode="url" placeholder="https://" autocomplete="off"></div></div>
+        <div class="acts acts-left">
+          <button class="btn btn-gold btn-sm" id="pedir" type="button">Copiar pedido de análise<span class="dot"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v5M12 16v5M3 12h5M16 12h5"/><path d="M12 8.5l1.2 2.3 2.3 1.2-2.3 1.2L12 15.5l-1.2-2.3L8.5 12l2.3-1.2z"/></svg></span></button>
+        </div>
+        <p class="toast toast-left" id="depToast" role="status"></p>
+        <p class="dep-how">O pedido leva o link, o mapa, a margem, o score e o que já foi achado, e pede de volta: os problemas por prioridade, referências para estudar e as notas do score.</p>
+        <p class="dep-ver" id="depVer" hidden></p>
+      </div>
+
+      <div class="dep-main">
+        <div class="dep-block">
+          <h3 class="dep-h">O que precisa melhorar</h3>
+          <div class="achados" id="achados">
+            <p class="vazio">Nenhum diagnóstico ainda. A resposta da análise vira esta lista na página da oferta.</p>
+          </div>
+        </div>
+        <div class="dep-block">
+          <h3 class="dep-h">Referências para estudar</h3>
+          <div class="refs" id="refs">
+            <p class="vazio">Sem referências ainda.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="acts">
+      <button class="btn btn-gold btn-sm" id="copiar" type="button">Copiar resumo<span class="dot"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg></span></button>
+      <button class="btn btn-ghost btn-sm" id="limpar" type="button">Voltar ao original<span class="dot"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/></svg></span></button>
+    </div>
+    <p class="toast" id="toast" role="status"></p>
+    <p>Nada aqui é salvo. Fechou a aba, apagou: use “Copiar resumo” para guardar.</p>
+    <p>© 2026 APEX Assessoria</p>
+  </div>
+</footer>
+
+<script>
+/* A OFERTA. So isto muda de uma pagina para outra.
+   Campo vazio fica vazio na tela; nota fora de 0 a 5 e ignorada. */
+window.OFERTA = {
+  nome: '',
+  link: '',                 /* a pagina de vendas, so como texto */
+  mercado: 'br',            /* 'br', 'pais' ou 'global' */
+  pais: '',
+  moeda: 'BRL',
+  cambio: '',
+  mapa: {
+    publico: '', dor: '', desejo: '', promessa: '', mecanismo: '',
+    entrega: '', bonus: '', prova: '', garantia: '', preco: ''
+  },
+  margem: {
+    preco: '', extra: '', platPct: '9,9', platFix: '1,00', imposto: '6',
+    comissao: '0', entrega: '0', cpa: '', alvo: '30', vendas: ''
+  },
+  notas: {
+    /* dor, promessa, publico, mercado, mecanismo, prova, valor, risco, diferenca */
+  },
+  depurador: {
+    versao: '',             /* ex.: 'v1 · 04/11/2026' */
+    achados: [
+      /* { prioridade: 'alta' | 'media' | 'baixa', titulo: '', vimos: '', fazer: '' } */
+    ],
+    referencias: [
+      /* { nome: '', url: '', porque: '' } */
+    ]
+  }
+};
+</script>
+<script src="/oferta/oferta.js"></script>
+
+</body>
+</html>
